@@ -1,10 +1,9 @@
 package me.wappen.gamezexample;
 
-import me.wappen.gamez.Entity;
-import me.wappen.gamez.Game;
-import me.wappen.gamez.Node;
-import me.wappen.gamez.Window;
+import me.wappen.gamez.*;
 import me.wappen.gamez.components.KinematicBody;
+import me.wappen.gamez.components.colliders.CircleCollider;
+import me.wappen.gamez.components.shapes.CircleShape;
 import me.wappen.gamez.components.shapes.RectangleShape;
 import processing.core.PVector;
 
@@ -15,7 +14,7 @@ import processing.core.PVector;
 
 public class GameExample extends Game {
     public static void main(String[] args) {
-        new GameExample().run(800, 800);
+        new GameExample().run(1200, 800);
     }
 
     @Override
@@ -23,7 +22,8 @@ public class GameExample extends Game {
         getView().setColor(0xff_c8d2ff);
 
         Entity player = new Entity("player",
-                new RectangleShape(10, 10, 0xff_f00101),
+                new CircleShape(20, 0xff_f00101),
+                new CircleCollider(20),
                 new KinematicBody(),
                 new KeyboardController(),
                 new WallCollider());
@@ -32,17 +32,30 @@ public class GameExample extends Game {
         spawn(player);
         player.getNode().getLocalPos().z += 10;
 
+        Entity coll = new Entity("coll",
+                new CircleShape(20, 0xff_f0f001),
+                new CircleCollider(20),
+                new KinematicBody(),
+                new WallCollider());
+        coll.getComponent(KinematicBody.class).setGravity(9.807f);
+        coll.getComponent(KinematicBody.class).setDrag(0.0f);
+        coll.getComponent(KinematicBody.class).setVel(PVector.random2D().mult(2f));
+        coll.getComponent(WallCollider.class).setBounciness(1.0f);
+        spawn(coll);
+        coll.getNode().setPos(new PVector(100, 100));
+
         Node boxParent = spawn(new Entity("boxParent"));
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 50; i++) {
             Entity box = new Entity("box" + i,
-                    new RectangleShape(10, 10, 0xff_01f001),
+                    new CircleShape(10, 0xff_01f001),
+                    new CircleCollider(10),
                     new KinematicBody(),
                     new WallCollider());
             box.getComponent(KinematicBody.class).setGravity(9.807f);
-            box.getComponent(KinematicBody.class).setDrag(0.2f);
+            box.getComponent(KinematicBody.class).setDrag(0.1f);
             box.getComponent(KinematicBody.class).setVel(PVector.random2D().mult(10f));
-            box.getComponent(WallCollider.class).setBounciness(0.8f);
+            box.getComponent(WallCollider.class).setBounciness(0.9f);
             spawn(box, boxParent);
 
             PVector pos = new PVector(Window.getResX() / 2f, Window.getResY() / 2f).add(PVector.random2D().mult(50f));

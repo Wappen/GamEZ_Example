@@ -15,7 +15,7 @@ public class WallCollider extends Component {
     private float bounciness = 0.5f;
 
     @Override
-    public void onTick(GameTime time) {
+    public void onPhysicsTick(GameTime time) {
         PVector vel = getEntity().getComponent(KinematicBody.class).getVel();
         PVector pos = getNode().getLocalPos();
 
