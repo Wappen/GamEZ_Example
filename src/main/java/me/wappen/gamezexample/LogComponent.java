@@ -2,6 +2,7 @@ package me.wappen.gamezexample;
 
 import me.wappen.gamez.GameTime;
 import me.wappen.gamez.components.Component;
+import me.wappen.gamez.components.colliders.CircleCollider;
 import processing.core.PVector;
 
 /**
@@ -12,7 +13,6 @@ import processing.core.PVector;
 public class LogComponent extends Component {
     @Override
     public void onTick(GameTime time) {
-        PVector pos = getNode().getPos();
-        System.out.printf("delta: %f%nx: %f y: %f z: %f%n", time.getDeltaTime(), pos.x, pos.y, pos.z);
+        System.out.printf("r: %f%n", getEntity().getComponent(CircleCollider.class).getRadius());
     }
 }

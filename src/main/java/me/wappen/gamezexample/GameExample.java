@@ -28,13 +28,13 @@ public class GameExample extends Game {
                 new KeyboardController(),
                 new WallCollider());
         player.getComponent(KinematicBody.class).setGravity(9.807f);
-        player.getComponent(KinematicBody.class).setDrag(0.6f);
+        player.getComponent(KinematicBody.class).setDrag(0.4f);
         spawn(player);
         player.getNode().getLocalPos().z += 10;
 
         Entity coll = new Entity("coll",
-                new CircleShape(20, 0xff_f0f001),
-                new CircleCollider(20),
+                new CircleShape(50, 0xff_f0f001),
+                new CircleCollider(50),
                 new KinematicBody(),
                 new WallCollider());
         coll.getComponent(KinematicBody.class).setGravity(9.807f);
@@ -46,16 +46,16 @@ public class GameExample extends Game {
 
         Node boxParent = spawn(new Entity("boxParent"));
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 0; i++) {
             Entity box = new Entity("box" + i,
-                    new CircleShape(10, 0xff_01f001),
-                    new CircleCollider(10),
+                    new CircleShape(20, 0xff_01f001),
+                    new CircleCollider(20),
                     new KinematicBody(),
                     new WallCollider());
             box.getComponent(KinematicBody.class).setGravity(9.807f);
-            box.getComponent(KinematicBody.class).setDrag(0.1f);
+            box.getComponent(KinematicBody.class).setDrag(0.0f);
             box.getComponent(KinematicBody.class).setVel(PVector.random2D().mult(10f));
-            box.getComponent(WallCollider.class).setBounciness(0.9f);
+            box.getComponent(WallCollider.class).setBounciness(1.0f);
             spawn(box, boxParent);
 
             PVector pos = new PVector(Window.getResX() / 2f, Window.getResY() / 2f).add(PVector.random2D().mult(50f));
