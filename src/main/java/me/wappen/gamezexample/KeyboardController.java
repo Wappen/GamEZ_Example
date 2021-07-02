@@ -19,18 +19,44 @@ public class KeyboardController extends Component {
     private float refuelRate = 20f;
     private float fuel;
 
+    private PVector input = new PVector();
+
+    private boolean physicsLag;
+
     @Override
     public void onSpawn() {
         fuel = maxFuel;
     }
 
     @Override
-    public void onTick(GameTime time) {
-        if (getGame().getKeyState(KeyEvent.VK_UP) == KeyState.DOWN) {
+    public void onPhysicsTick(GameTime time) {
+        if (input.y < 0) {
             float power = fuelRate * time.getDeltaTime();
             if (power > fuel) power = fuel;
             getEntity().getComponent(KinematicBody.class).getVel().add(0, -power);
             fuel -= power;
+        }
+        if (input.x < 0) {
+            getEntity().getComponent(KinematicBody.class).getVel().add(-10 * time.getDeltaTime(), 0);
+        }
+        else if (input.x > 0) {
+            getEntity().getComponent(KinematicBody.class).getVel().add(10 * time.getDeltaTime(), 0);
+        }
+
+        input.set(0, 0);
+
+        if (physicsLag) {
+            for (int i = 0; i < 60000000; i++) {
+                System.out.print("");
+            }
+            physicsLag = false;
+        }
+    }
+
+    @Override
+    public void onTick(GameTime time) {
+        if (getGame().getKeyState(KeyEvent.VK_UP) == KeyState.DOWN) {
+            input.y--;
         }
         if (getGame().getKeyState(KeyEvent.VK_UP) == KeyState.UP) {
             float refuel = refuelRate * time.getDeltaTime();
@@ -39,9 +65,9 @@ public class KeyboardController extends Component {
         }
 
         if (getGame().getKeyState(KeyEvent.VK_LEFT) == KeyState.DOWN)
-            getEntity().getComponent(KinematicBody.class).getVel().add(-10 * time.getDeltaTime(), 0);
+            input.x--;
         if (getGame().getKeyState(KeyEvent.VK_RIGHT) == KeyState.DOWN)
-            getEntity().getComponent(KinematicBody.class).getVel().add(10 * time.getDeltaTime(), 0);
+            input.x++;
 
         if (getGame().getKeyState(KeyEvent.VK_BACK_SPACE) == KeyState.PRESSED)
             getGame().findEntity("boxParent").getNode().delete();
@@ -73,6 +99,8 @@ public class KeyboardController extends Component {
             getGame().findEntity("boxParent").getNode().getLocalPos().y -= 100 * time.getDeltaTime();
 
         if (getGame().getKeyState(KeyEvent.VK_Q) == KeyState.PRESSED)
-            for (int i = 0; i < 30000000; i++) { System.out.print(""); }
+            for (int i = 0; i < 60000000; i++) { System.out.print(""); }
+        if (getGame().getKeyState(KeyEvent.VK_E) == KeyState.PRESSED)
+            physicsLag = true;
     }
 }
